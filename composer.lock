@@ -1,0 +1,125 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "57730d73bd0b4a2a6787e11809df38be",
+    "packages": [
+        {
+            "name": "district5/filter",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "ssh://git@bitbucket.district5.co.uk/d5libs/filter.git",
+                "reference": "d7f3edcc7da6d37c4a286b9de5405ac790f127f9"
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "District5\\": "src/"
+                }
+            },
+            "license": [
+                "Proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Morgan",
+                    "email": "mark.morgan@district5.co.uk"
+                }
+            ],
+            "description": "District5 Filter Library",
+            "homepage": "https://bitbucket.district5.co.uk/projects/D5LIBS/repos/filter/browse",
+            "keywords": [
+                "district5",
+                "filter",
+                "php"
+            ],
+            "time": "2018-05-26T09:52:04+00:00"
+        },
+        {
+            "name": "district5/utility",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "ssh://git@bitbucket.district5.co.uk/d5libs/utility.git",
+                "reference": "28bbe0385296ad7b7c84bbad0adf78aa1248880c"
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "District5\\": "src/"
+                }
+            },
+            "license": [
+                "Proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Morgan",
+                    "email": "mark.morgan@district5.co.uk"
+                }
+            ],
+            "description": "District5 Utility Library",
+            "homepage": "https://bitbucket.district5.co.uk/projects/D5LIBS/repos/utility/browse",
+            "keywords": [
+                "district5",
+                "php",
+                "utility"
+            ],
+            "time": "2018-05-26T10:24:25+00:00"
+        },
+        {
+            "name": "district5/validator",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "ssh://git@bitbucket.district5.co.uk/d5libs/validator.git",
+                "reference": "8f645701020977322390de7c064fc21916b4a159"
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "District5\\": "src/"
+                }
+            },
+            "license": [
+                "Proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Morgan",
+                    "email": "mark.morgan@district5.co.uk"
+                }
+            ],
+            "description": "District5 Validator Library",
+            "homepage": "https://bitbucket.district5.co.uk/projects/D5LIBS/repos/validator/browse",
+            "keywords": [
+                "district5",
+                "php",
+                "validator"
+            ],
+            "time": "2018-05-26T10:03:31+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=5.4.0"
+    },
+    "platform-dev": []
+}

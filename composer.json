@@ -1,0 +1,36 @@
+{
+  "name": "district5/validatorgroup",
+  "description": "District5 Validator Group Library",
+  "keywords": ["php", "district5", "validator group"],
+  "homepage": "https://bitbucket.district5.co.uk/projects/D5LIBS/repos/validatorgroup/browse",
+  "license": "Proprietary",
+  "authors": [
+    {
+      "name": "Mark Morgan",
+      "email": "mark.morgan@district5.co.uk"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "ssh://git@bitbucket.district5.co.uk/d5libs/filter.git"
+    },
+    {
+      "type": "vcs",
+      "url": "ssh://git@bitbucket.district5.co.uk/d5libs/validator.git"
+    },
+    {
+      "type": "vcs",
+      "url": "ssh://git@bitbucket.district5.co.uk/d5libs/utility.git"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "district5/filter": "2.*",
+    "district5/validator": "1.*",
+    "district5/utility": "1.*"
+  },
+  "autoload": {
+    "psr-4": { "District5\\": "src/" }
+  }
+}
