@@ -54,14 +54,16 @@ abstract class Group
      * @param array $filters Filters (Optional)
      * @param bool $required Flag indicating whether this field is required
      *
-     * @return \District5\Validate\Group Provides a fluent interface
+     * @return \District5\Validator\Group Provides a fluent interface
      *
      * @throws \InvalidArgumentException
      */
     protected function addField($fieldId, $validators = array(), $filters = array(), $required = true)
     {
         if (array_key_exists($fieldId, $this->_fields))
+        {
             throw new \InvalidArgumentException('Unable to add field, it is already declared inside this group');
+        }
         
         $this->_fields[$fieldId] = array(
             
@@ -203,7 +205,7 @@ abstract class Group
 
                 $toValidate = $filteredValue;
 
-                /* @var $validator \District5\Validate\I */
+                /* @var $validator \District5\Validator\I */
                 foreach ($validators as $validator)
                 {
                     if (! $validator->isValid($toValidate))
@@ -256,14 +258,16 @@ abstract class Group
      * @param bool $required A flag indicating whether the field is required (Optional)
      * @param array $requiresOtherFields Id's of fields that this field requires (Optional)
      *
-     * @return \District5\Validate\Group Provides a fluent interface
+     * @return \District5\Validator\Group Provides a fluent interface
      *
      * @throws \InvalidArgumentException If an existing field with id fieldId has not been previously set
      */
     public function modifyField($fieldId, $validators = null, $filters = null, $required = null, $requiresOtherFields = null)
     {
         if (!array_key_exists($fieldId, $this->_fields))
+        {
             throw new \InvalidArgumentException('Unable to modify field "' . $fieldId . '", it has not been previously declared in this group');
+        }
 
         $currentField = $this->_fields[$fieldId];
 
@@ -290,7 +294,7 @@ abstract class Group
      *
      * @param string $fieldId The existing field id
      *
-     * @return \District5\Validate\Group Provides a fluent interface
+     * @return \District5\Validator\Group Provides a fluent interface
      *
      * @throws \InvalidArgumentException If an existing field with id fieldId has not been previously set
      */
@@ -313,7 +317,7 @@ abstract class Group
      *
      * @param string $fieldId The existing field id
      *
-     * @return \District5\Validate\Group Provides a fluent interface
+     * @return \District5\Validator\Group Provides a fluent interface
      *
      * @throws \InvalidArgumentException If an existing field with id fieldId has not been previously set
      */
@@ -331,11 +335,83 @@ abstract class Group
     }
 
     /**
+     * Appends a filter to the list of filters
+     *
+     * @param string $fieldId The existing field id
+     * @param \District5\Filter\I $filter The filter to append to the list of filters
+     *
+     * @return \District5\Validator\Group Provides a fluent interface
+     *
+     * @throws \InvalidArgumentException If an existing field with id fieldId has not been previously set
+     */
+    public function appendFilterToFilters($fieldId, $filter)
+    {
+        if (!array_key_exists($fieldId, $this->_fields))
+        {
+            throw new \InvalidArgumentException('Unable to append filter to field "' . $fieldId . '", it has not been previously declared in this group');
+        }
+
+        $currentField = $this->_fields[$fieldId];
+
+        if (array_key_exists('f', $currentField))
+        {
+            $filters = $currentField['f'];
+        }
+        else
+        {
+            $filters = [];
+        }
+
+        $filters[] = $filter;
+        $currentField['f'] = $filters;
+
+        $this->_fields[$fieldId] = $currentField;
+
+        return $this;
+    }
+
+    /**
+     * Prepends a filter to the list of filters
+     *
+     * @param string $fieldId The existing field id
+     * @param \District5\Filter\I $filter The filter to prepend to the list of filters
+     *
+     * @return \District5\Validator\Group Provides a fluent interface
+     *
+     * @throws \InvalidArgumentException If an existing field with id fieldId has not been previously set
+     */
+    public function prependFilterToFilters($fieldId, $filter)
+    {
+        if (!array_key_exists($fieldId, $this->_fields))
+        {
+            throw new \InvalidArgumentException('Unable to prepend filter to field "' . $fieldId . '", it has not been previously declared in this group');
+        }
+
+        $currentField = $this->_fields[$fieldId];
+
+        if (array_key_exists('f', $currentField))
+        {
+            $filters = $currentField['f'];
+        }
+        else
+        {
+            $filters = [];
+        }
+
+        array_unshift($filters, $filter);
+        $currentField['f'] = $filters;
+
+        $this->_fields[$fieldId] = $currentField;
+
+        return $this;
+    }
+
+    /**
      * Removes an existing field
      *
      * @param string $fieldId The existing field id
      *
-     * @return \District5\Validate\Group Provides a fluent interface
+     * @return \District5\Validator\Group Provides a fluent interface
      */
     public function removeField($fieldId)
     {
@@ -352,7 +428,7 @@ abstract class Group
      *
      * @param int $x The number of fields to require
      *
-     * @return \District5\Validate\Group Provides a fluent interface
+     * @return \District5\Validator\Group Provides a fluent interface
      *
      * @throws \InvalidArgumentException If x is not numeric
      */
