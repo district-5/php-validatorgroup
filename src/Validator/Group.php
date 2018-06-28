@@ -86,6 +86,17 @@ abstract class Group
     }
 
     /**
+     * Allows manual setting of last error message for validation that happens outside this group, but requires that the
+     * rest of a function that depends on this can run as normal
+     *
+     * @param string $errorMessage
+     */
+    public function setLastErrorMessage($errorMessage)
+    {
+        $this->_lastErrorMessage = $errorMessage;
+    }
+
+    /**
      * Gets a processed value given the field id
      *
      * @param string $fieldId The field id
