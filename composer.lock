@@ -4,8 +4,43 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "57730d73bd0b4a2a6787e11809df38be",
+    "content-hash": "e392bb4321bc605e85538ff9d33b2e9a",
     "packages": [
+        {
+            "name": "district5/fileupload",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "ssh://git@bitbucket.district5.co.uk/d5libs/fileupload.git",
+                "reference": "7e8c60ac791b97bcd86395bd9760547d6b024fb3"
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "District5\\": "src/"
+                }
+            },
+            "license": [
+                "Proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Morgan",
+                    "email": "mark.morgan@district5.co.uk"
+                }
+            ],
+            "description": "District5 File Uploads Library",
+            "homepage": "https://bitbucket.district5.co.uk/projects/D5LIBS/repos/fileupload/browse",
+            "keywords": [
+                "district5",
+                "php",
+                "upload"
+            ],
+            "time": "2019-02-16T15:36:40+00:00"
+        },
         {
             "name": "district5/filter",
             "version": "2.0.1",
@@ -78,11 +113,11 @@
         },
         {
             "name": "district5/validator",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "ssh://git@bitbucket.district5.co.uk/d5libs/validator.git",
-                "reference": "8f645701020977322390de7c064fc21916b4a159"
+                "reference": "038c544537a7ddf0cd0b563879060cbcbc750392"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -109,7 +144,7 @@
                 "php",
                 "validator"
             ],
-            "time": "2018-05-26T10:03:31+00:00"
+            "time": "2018-05-26T11:22:43+00:00"
         }
     ],
     "packages-dev": [],

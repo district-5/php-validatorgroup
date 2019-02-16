@@ -48,6 +48,7 @@ abstract class Group
     protected $_minimumRequiredFields = 0;
     
     /**
+     * Adds a field
      *
      * @param string $fieldId The id of the field
      * @param array $validators Validators (Optional)
@@ -66,15 +67,44 @@ abstract class Group
         }
         
         $this->_fields[$fieldId] = array(
-            
-                'r' => $required,
-                'v' => $validators,
-                'f' => $filters
+            'r' => $required,
+            'v' => $validators,
+            'f' => $filters,
+            'is_file' => false
         );
         
         return $this;
     }
-    
+
+    /**
+     * Adds a field that supports a file upload
+     *
+     * @param $fieldId
+     * @param array $validators
+     * @param array $filters
+     * @param bool $required
+     *
+     * @@return \District5\Validator\Group Provides a fluent interface
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function addFileUploadField($fieldId, $validators = array(), $filters = array(), $required = true)
+    {
+        if (array_key_exists($fieldId, $this->_fields))
+        {
+            throw new \InvalidArgumentException('Unable to add field, it is already declared inside this group');
+        }
+
+        $this->_fields[$fieldId] = array(
+            'r' => $required,
+            'v' => $validators,
+            'f' => $filters,
+            'is_file' => true
+        );
+
+        return $this;
+    }
+
     /**
      * Gets the last error that occurred in this validation group
      *
@@ -122,7 +152,7 @@ abstract class Group
     }
 
     /**
-     * Checks whether this form is valid against the population data given
+     * Checks whether this json is valid against the population data given
      *
      * @param array $data The data to validate against, in a json_decode format (stdobject)
      *
@@ -146,8 +176,11 @@ abstract class Group
     }
 
     /**
+     * Checks whether this form is valid against the population data given
+     *
      * @param \Slim\Http\Request $request
      * @param bool $debug
+     *
      * @return bool
      */
     public function isValidSlimPostOrPutRequest($request, $debug = false)
@@ -185,32 +218,54 @@ abstract class Group
             $filters = $value['f'];
             $validators = $value['v'];
             $required = $value['r'];
+            $isFile = $value['is_file'];
 
-            $fieldHasValue = $dataHandler->hasValue($fieldId);
+            if ($isFile === false)
+            {
+                $fieldHasValue = $dataHandler->hasValue($fieldId);
+            }
+            else
+            {
+                $fieldHasValue = array_key_exists($fieldId, $_FILES);
+//                $fileMeta = $_FILES[$fieldId];
+//                if (is_array($fileMeta['error']) === true)
+//                {
+//                    throw new \Exception('Multiple files per field is not currently supported');
+//                }
+            }
 
-            if ($required && false === $fieldHasValue)
+            if ($required === true && $fieldHasValue === false)
             {
                 // required field but it is not set
                 $this->_lastErrorMessage = 'Missing required field "' . $fieldId . '"';
-                // TODO: add support for logger in future...
-//                \AARK\Core\Log::GetLogger()->LogInfo('Validation Error', get_class($this), 'The field "' . $fieldId . '" is required but has not been set');
                 return false;
             }
 
             if ($required === true)
+            {
                 $foundRequiredField = true;
+            }
 
-            if (true === $fieldHasValue)
+            if ($fieldHasValue === true)
             {
                 // store original value and filtered value
-                $fieldValue = $dataHandler->getValue($fieldId);
-                $this->_fields[$fieldId]['ov'] = $fieldValue;
+                if ($isFile === false)
+                {
+                    $fieldValue = $dataHandler->getValue($fieldId);
+                }
+                else
+                {
+                    $fieldValue = new \District5\FileUpload\DTO\FormSingleFileUpload($fieldId);
+                }
 
+                $this->_fields[$fieldId]['ov'] = $fieldValue;
                 $filteredValue = $fieldValue;
 
                 /* @var $filter \District5\Filter\I */
                 foreach ($filters as $filter)
+                {
                     $filteredValue = $filter->filter($filteredValue);
+                }
 
                 $this->_fields[$fieldId]['fv'] = $filteredValue;
 
@@ -223,9 +278,10 @@ abstract class Group
                     {
                         $this->_lastErrorMessage = (null == $validator->getLastErrorMessage() || '' == $validator->getLastErrorMessage()) ? 'The field "' . $fieldId . '" has been set but fails validation' : $validator->getLastErrorMessage();
                         if ($debug === true)
+                        {
                             $this->_lastErrorMessage .= ' ::debug:: ' . (string)$toValidate;
+                        }
 
-//                        \AARK\Core\Log::GetLogger()->LogInfo('Abstract Validation Group', 'The field "' . $fieldId . '" has been set but fails validation');
                         return false;
                     }
                 }
@@ -237,7 +293,6 @@ abstract class Group
         if ($foundRequiredField === false && $numberOfProvidedValues < $this->_minimumRequiredFields)
         {
             $this->_lastErrorMessage = 'At least ' . $this->_minimumRequiredFields . ' field(s) are required';
-//            \AARK\Core\Log::GetLogger()->LogInfo('Abstract Validation Group', 'The minimum number of fields has not been met');
             return false;
         }
 

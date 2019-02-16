@@ -8,9 +8,17 @@
     {
       "name": "Mark Morgan",
       "email": "mark.morgan@district5.co.uk"
+    },
+    {
+      "name": "Roger Thomas",
+      "email": "roger.thomas@district5.co.uk"
     }
   ],
   "repositories": [
+    {
+      "type": "vcs",
+      "url": "ssh://git@bitbucket.district5.co.uk/d5libs/fileupload.git"
+    },
     {
       "type": "vcs",
       "url": "ssh://git@bitbucket.district5.co.uk/d5libs/filter.git"
@@ -26,6 +34,7 @@
   ],
   "require": {
     "php": ">=5.4.0",
+    "district5/fileupload": "1.*",
     "district5/filter": "2.*",
     "district5/validator": "1.*",
     "district5/utility": "1.*"
