@@ -1,18 +1,18 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "e392bb4321bc605e85538ff9d33b2e9a",
     "packages": [
         {
             "name": "district5/fileupload",
-            "version": "1.0.1",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "ssh://git@bitbucket.district5.co.uk/d5libs/fileupload.git",
-                "reference": "7e8c60ac791b97bcd86395bd9760547d6b024fb3"
+                "reference": "af4d6f667f70d113c0016e7dc1d407138e5a5afb"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -39,7 +39,7 @@
                 "php",
                 "upload"
             ],
-            "time": "2019-02-16T15:36:40+00:00"
+            "time": "2019-04-28T21:16:45+00:00"
         },
         {
             "name": "district5/filter",

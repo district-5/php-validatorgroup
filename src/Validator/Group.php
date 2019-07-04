@@ -468,6 +468,11 @@ abstract class Group
         return $this;
     }
 
+    /**
+     * Presents all eligible fields as string ready to echo into a script tag, as an array of objects
+     *
+     * @return string
+     */
     public function asJS()
     {
         $toReturn = array();
