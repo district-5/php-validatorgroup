@@ -70,9 +70,40 @@ abstract class Group
             'r' => $required,
             'v' => $validators,
             'f' => $filters,
+            's' => false,
             'is_file' => false
         );
         
+        return $this;
+    }
+
+    /**
+     * Adds a field
+     *
+     * @param string $fieldId The id of the field
+     * @param array $validators Validators (Optional)
+     * @param array $filters Filters (Optional)
+     * @param bool $required Flag indicating whether this field is required
+     *
+     * @return \District5\Validator\Group Provides a fluent interface
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function addPasswordField($fieldId, $validators = array(), $filters = array(), $required = true)
+    {
+        if (array_key_exists($fieldId, $this->_fields))
+        {
+            throw new \InvalidArgumentException('Unable to add field, it is already declared inside this group');
+        }
+
+        $this->_fields[$fieldId] = array(
+            'r' => $required,
+            'v' => $validators,
+            'f' => $filters,
+            's' => true,
+            'is_file' => false
+        );
+
         return $this;
     }
 
@@ -99,6 +130,7 @@ abstract class Group
             'r' => $required,
             'v' => $validators,
             'f' => $filters,
+            's' => false,
             'is_file' => true
         );
 
@@ -434,6 +466,41 @@ abstract class Group
         $this->_fields[$fieldId] = $currentField;
 
         return $this;
+    }
+
+    public function asJS()
+    {
+        $toReturn = array();
+
+        foreach ($this->_fields as $fieldName => $fieldValue)
+        {
+            $isFile = $fieldValue['is_file'];
+            if ($isFile === true)
+            {
+                continue;
+            }
+
+            $isSecure = $fieldValue['s'];
+            if ($isSecure === true)
+            {
+                continue;
+            }
+
+            if (!array_key_exists('fv', $fieldValue))
+            {
+                continue;
+            }
+
+            $filteredValue = $fieldValue['fv'];
+            if ($filteredValue === null)
+            {
+                continue;
+            }
+
+            $toReturn[] = array($fieldName => $filteredValue);
+        }
+
+        return json_encode((array)$toReturn);
     }
 
     /**
