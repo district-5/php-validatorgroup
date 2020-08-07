@@ -17,15 +17,11 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "ssh://git@bitbucket.district5.co.uk/d5libs/fileupload.git"
+      "url": "git@github.com:district-5/php-filter.git"
     },
     {
       "type": "vcs",
-      "url": "ssh://git@bitbucket.district5.co.uk/d5libs/filter.git"
-    },
-    {
-      "type": "vcs",
-      "url": "ssh://git@bitbucket.district5.co.uk/d5libs/validator.git"
+      "url": "git@github.com:district-5/php-validator.git"
     },
     {
       "type": "vcs",
