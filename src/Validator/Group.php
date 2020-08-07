@@ -193,7 +193,7 @@ abstract class Group
      */
     public function isValidJSON($data, $debug = false)
     {
-        $dataHandler  = new \District5\Utility\AnonymousClass();
+        $dataHandler  = new \District5\Anon\AnonymousClass();
         $dataHandler->dataSource = $data;
         $dataHandler->hasValue = function($name) use($dataHandler)
         {
@@ -220,7 +220,7 @@ abstract class Group
         if (!($request->isPost() || $request->isPut()))
             return false;
 
-        $dataHandler  = new \District5\Utility\AnonymousClass();
+        $dataHandler  = new \District5\Anon\AnonymousClass();
         $dataHandler->dataSource = $request;
         $dataHandler->hasValue = function($name) use($dataHandler)
         {
@@ -236,7 +236,7 @@ abstract class Group
     }
 
     /**
-     * @param \District5\Utility\AnonymousClass $dataHandler
+     * @param \District5\Anon\AnonymousClass $dataHandler
      * @param bool $debug
      * @return bool
      */

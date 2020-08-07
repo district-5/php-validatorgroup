@@ -17,23 +17,22 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "git@github.com:district-5/php-filter.git"
+      "url": "https://github.com/district-5/php-anonymousobjects.git"
     },
     {
       "type": "vcs",
-      "url": "git@github.com:district-5/php-validator.git"
+      "url": "https://github.com/district-5/php-filter.git"
     },
     {
       "type": "vcs",
-      "url": "ssh://git@bitbucket.district5.co.uk/d5libs/utility.git"
+      "url": "https://github.com/district-5/php-validator.git"
     }
   ],
   "require": {
     "php": ">=5.4.0",
-    "district5/fileupload": "1.*",
+    "district5/anonymousobjects": ">=1.1.0",
     "district5/filter": "2.*",
-    "district5/validator": "1.*",
-    "district5/utility": "1.*"
+    "district5/validator": "1.*"
   },
   "autoload": {
     "psr-4": { "District5\\": "src/" }
