@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class GroupWithJSONTest
- * @package District5\ValidatorTests\Adapters
+ * @package District5\ValidatorGroupTests
  */
 class GroupTest extends TestCase
 {
@@ -19,7 +19,7 @@ class GroupTest extends TestCase
             'testString01' => "District5"
         ];
 
-        $handler = new JSON($obj, false);
+        $handler = new JSON($obj);
 
         $group = new SimpleGroupMock();
 
@@ -34,7 +34,7 @@ class GroupTest extends TestCase
             'testString01' => "District5 "
         ];
 
-        $handler = new JSON($obj, false);
+        $handler = new JSON($obj);
 
         $group = new SimpleGroupMock();
 

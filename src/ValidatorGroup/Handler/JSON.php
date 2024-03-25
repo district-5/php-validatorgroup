@@ -39,12 +39,12 @@ class JSON implements HandlerInterface
 {
     private array $source;
 
-    public function __construct($data, bool $requiresDecoding)
+    public function __construct(array|string $data)
     {
-        if (true === $requiresDecoding) {
-            $this->source = json_decode($data, true);
-        } else {
+        if (is_array($data)) {
             $this->source = $data;
+        } else {
+            $this->source = json_decode($data, true);
         }
     }
 
