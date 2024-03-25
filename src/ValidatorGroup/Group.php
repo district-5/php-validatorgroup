@@ -39,9 +39,7 @@ use District5\ValidatorGroup\Handler\HandlerInterface;
 /**
  * Group
  *
- * A group for grouping data validators and filters, allowing them to be run on data object(s)
- *
- * @author Mark Morgan <mark.morgan@district5.co.uk>
+ * A group for grouping data validators and filters, allowing them to be run on data object(s).
  */
 abstract class Group
 {
@@ -51,14 +49,9 @@ abstract class Group
     protected array $fields = [];
 
     /**
-     * @var bool
-     */
-    protected bool $_validated = false;
-
-    /**
      * @var string|null
      */
-    protected ?string $_lastErrorMessage = null;
+    protected ?string $lastErrorMessage = null;
 
     /**
      * @var int
@@ -77,16 +70,10 @@ abstract class Group
      */
     protected function addField(string $fieldId, array $validators = [], array $filters = [], bool $required = true): void
     {
-        if (array_key_exists($fieldId, $this->_fields)) {
+        if (isset($this->fields[$fieldId])) {
             throw new \InvalidArgumentException('Unable to add field, it is already declared inside this group');
         }
         
-//        $this->_fields[$fieldId] = array(
-//            'r' => $required,
-//            'v' => $validators,
-//            'f' => $filters,
-//            's' => false
-//        );
         $this->fields[$fieldId] = new GroupItem(
             $fieldId,
             $required,
@@ -108,16 +95,10 @@ abstract class Group
      */
     protected function addPasswordField(string $fieldId, array $validators = [], array $filters = [], bool $required = true): void
     {
-        if (array_key_exists($fieldId, $this->_fields)) {
+        if (isset($this->fields[$fieldId])) {
             throw new \InvalidArgumentException('Unable to add field, it is already declared inside this group');
         }
 
-//        $this->_fields[$fieldId] = array(
-//            'r' => $required,
-//            'v' => $validators,
-//            'f' => $filters,
-//            's' => true
-//        );
         $this->fields[$fieldId] = new GroupItem(
             $fieldId,
             $required,
@@ -134,7 +115,7 @@ abstract class Group
      */
     public function getLastErrorMessage(): ?string
     {
-    	return $this->_lastErrorMessage;
+    	return $this->lastErrorMessage;
     }
 
     /**
@@ -145,7 +126,7 @@ abstract class Group
      */
     public function setLastErrorMessage(string $errorMessage): void
     {
-        $this->_lastErrorMessage = $errorMessage;
+        $this->lastErrorMessage = $errorMessage;
     }
 
     /**
@@ -207,7 +188,7 @@ abstract class Group
             if (true === $required && false === $fieldHasValue) {
                 // required field but it is not set
                 // TODO: fix this
-                $this->_lastErrorMessage = 'Missing required field "' . $fieldId . '"';
+                $this->lastErrorMessage = 'Missing required field "' . $fieldId . '"';
                 return false;
             }
 
@@ -240,9 +221,9 @@ abstract class Group
                 if (!$validator->isValid($filteredValue)) {
 
                     // TODO: fix this
-                    $this->_lastErrorMessage = (null == $validator->getLastErrorMessage() || '' == $validator->getLastErrorMessage()) ? 'The field "' . $fieldId . '" has been set but fails validation' : $validator->getLastErrorMessage();
+                    $this->lastErrorMessage = (null == $validator->getLastErrorMessage() || '' == $validator->getLastErrorMessage()) ? 'The field "' . $fieldId . '" has been set but fails validation' : $validator->getLastErrorMessage();
                     if ($debug === true) {
-                        $this->_lastErrorMessage .= ' ::debug:: ' . (string)$filteredValue;
+                        $this->lastErrorMessage .= ' ::debug:: ' . (string)$filteredValue;
                     }
 
                     return false;
@@ -253,7 +234,7 @@ abstract class Group
         }
 
         if (false ===$foundRequiredField && $numberOfProvidedValues < $this->minimumRequiredFields) {
-            $this->_lastErrorMessage = 'At least ' . $this->minimumRequiredFields . ' field(s) are required';
+            $this->lastErrorMessage = 'At least ' . $this->minimumRequiredFields . ' field(s) are required';
             return false;
         }
 
@@ -361,7 +342,7 @@ abstract class Group
     }
 
     /**
-     * Appends a filter to the list of filters
+     * Appends a filter to the list of filters.
      *
      * @param string $fieldId The existing field id
      * @param FilterInterface $filter The filter to append to the list of filters
@@ -411,56 +392,41 @@ abstract class Group
     }
 
     /**
-     * Prepends a filter to the list of filters
+     * Prepends a filter to the list of filters.
      *
      * @param string $fieldId The existing field id
-     * @param \District5\Filter\I $filter The filter to prepend to the list of filters
-     *
-     * @return \District5\Validator\Group Provides a fluent interface
+     * @param FilterInterface $filter The filter to prepend to the list of filters
      *
      * @throws \InvalidArgumentException If an existing field with id fieldId has not been previously set
      */
-    public function prependFilterToFilters($fieldId, $filter)
+    public function prependFilterToFilters(string $fieldId, FilterInterface $filter): void
     {
-        if (!array_key_exists($fieldId, $this->_fields))
-        {
+        if (!isset($this->fields[$fieldId])) {
             throw new \InvalidArgumentException('Unable to prepend filter to field "' . $fieldId . '", it has not been previously declared in this group');
         }
 
-        $currentField = $this->_fields[$fieldId];
+        /** @var GroupItem $currentField */
+        $currentField = $this->fields[$fieldId];
+        $currentFilters = $currentField->getFilters();
 
-        if (array_key_exists('f', $currentField))
-        {
-            $filters = $currentField['f'];
-        }
-        else
-        {
-            $filters = [];
-        }
+        array_unshift($currentFilters, $filter);
+        $currentField->setFilters($currentFilters);
 
-        array_unshift($filters, $filter);
-        $currentField['f'] = $filters;
-
-        $this->_fields[$fieldId] = $currentField;
-
-        return $this;
+        $this->fields[$fieldId] = $currentField;
     }
 
     /**
-     * Removes an existing field
+     * Removes an existing field.
      *
      * @param string $fieldId The existing field id
-     *
-     * @return \District5\Validator\Group Provides a fluent interface
      */
-    public function removeField($fieldId)
+    public function removeField(string $fieldId): void
     {
-        if (!array_key_exists($fieldId, $this->_fields))
+        if (!isset($this->fields[$fieldId])) {
             throw new \InvalidArgumentException('Unable to remove field "' . $fieldId . '", it has not been previously declared in this group');
+        }
 
-        unset($this->_fields[$fieldId]);
-
-        return $this;
+        unset($this->fields[$fieldId]);
     }
 
     /**
@@ -468,17 +434,14 @@ abstract class Group
      *
      * @param int $x The number of fields to require
      *
-     * @return \District5\Validator\Group Provides a fluent interface
-     *
      * @throws \InvalidArgumentException If x is not numeric
      */
-    public function requiresAtLeastXFields($x)
+    public function requiresAtLeastXFields(int $x): void
     {
-        if (!is_numeric($x))
+        if (!is_numeric($x)) {
             throw new \InvalidArgumentException('requiresAtLeastXFields needs a numeric value');
+        }
 
         $this->minimumRequiredFields = $x;
-
-        return $this;
     }
 }

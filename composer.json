@@ -15,7 +15,18 @@
     "district5/filter": "3.*",
     "district5/validator": "2.*"
   },
+  "require-dev": {
+    "phpunit/phpunit": "9.*",
+    "district5/filters": ">=3.0.0",
+    "district5/validators": ">=3.0.0"
+  },
   "autoload": {
-    "psr-4": { "District5\\ValidatorGroup\\": "src/" }
+    "psr-4": { "District5\\ValidatorGroup\\": "src/ValidatorGroup" }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "District5Tests\\ValidatorGroupTests\\": "tests/ValidatorGroupTests",
+      "District5Tests\\ValidatorGroupMocks\\": "tests/ValidatorGroupMocks"
+    }
   }
 }
